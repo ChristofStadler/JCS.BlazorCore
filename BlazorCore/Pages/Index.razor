@@ -1,0 +1,109 @@
+﻿@page "/"
+@using BlazorCore.Game
+@inject GameService GameService
+
+@using Cloudcrate.AspNetCore.Blazor.Browser.Storage;
+@inject LocalStorage Storage
+
+<h1>Blazor!</h1>
+<h2>Welcome @player.Name</h2>
+
+<div class="container">
+    <div class="row">
+        <div class="col-sm">
+            <h3>Lobby</h3>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>UID</th>
+                        <th>Players</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (GameService.Sessions == null || GameService.Sessions.Count() == 0)
+                    {
+                        <tr>
+                            <td colspan="4" style="text-align: center">No games at the moment.</td>
+                        </tr>
+                    }
+                    else
+                    {
+                        @foreach (var session in GameService.Sessions)
+                        {
+                            <tr>
+                                <td>@session.UID</td>
+                                <td>@session.Players.Count()</td>
+                                <td>@session.GetStatus</td>
+                                <td><button>Join</button></td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+        <div class="col-sm">
+            <h3>Leaderboard</h3>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>UID</th>
+                        <th>Name</th>
+                        <th>Score</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (GameService.Players == null || GameService.Players.Count() == 0)
+                    {
+                        <tr>
+                            <td colspan="4" style="text-align: center">Leaderboard is empty.</td>
+                        </tr>
+                    }
+                    else
+                    {
+                        @foreach (var player in GameService.Players)
+                        {
+                            <tr>
+                                <td>@player.UID</td>
+                                <td>@player.Name</td>
+                                <td>@player.Score</td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+@code {
+    GameService.Player player;
+
+    protected override async Task OnInitAsync()
+    {
+        player = GetPlayer();
+    }
+
+    public GameService.Player GetPlayer()
+    {
+        var player = GameService.Players.FirstOrDefault(n => n.UID == GetUID());
+        if(player == null)
+        {
+            player = new GameService.Player() {
+                UID = GetUID()
+            };
+            GameService.Players.Add(player);
+        }
+
+        return player;
+    }
+
+    public string GetUID()
+    {
+        if (String.IsNullOrEmpty(Storage["UID"]))
+            Storage["UID"] = Guid.NewGuid().ToString();
+
+        return Storage["UID"];
+    }
+}

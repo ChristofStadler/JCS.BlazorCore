@@ -1,0 +1,27 @@
+﻿@using BlazorCore.Game
+@inject GameService GameService
+    <div class="game-level">
+        @foreach (var cell in level.Cells)
+        {
+            <div class="cell"></div>
+        }
+    </div>
+<style>
+    .game-level cell {
+        float: left;
+        width: 4px;
+        height: 4px;
+        box-shadow: 1px 1px #808080;
+    }
+</style>
+@code {
+    [Parameter]
+    private string SessionUID { get; set; }
+
+    GameService.Level level;
+
+    protected override async Task OnInitAsync()
+    {
+        level = GameService.Sessions.FirstOrDefault(n => n.UID == SessionUID).Level;
+    }
+}

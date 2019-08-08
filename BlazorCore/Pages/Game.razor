@@ -1,0 +1,31 @@
+﻿@page "/game"
+@using BlazorCore.Game
+@inject GameService GameService
+
+@using Cloudcrate.AspNetCore.Blazor.Browser.Storage;
+@inject LocalStorage Storage
+
+<h1>Game</h1>
+
+<Level SessionUID="@session.UID"></Level>
+
+@code {
+    GameService.Session session;
+
+    protected override async Task OnInitAsync()
+    {
+        session = GameService.Sessions.FirstOrDefault();
+        if (session == null)
+        {
+            GameService.NewSession(GetUID());
+        }
+    }
+
+    public string GetUID()
+    {
+        if(String.IsNullOrEmpty(Storage["UID"]))
+            Storage["UID"] = Guid.NewGuid().ToString();
+
+        return Storage["UID"];
+    }
+}
