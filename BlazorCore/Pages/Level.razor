@@ -1,6 +1,4 @@
-﻿@using BlazorCore.Services
-@inject GameService GameService
-@if (level == null)
+﻿@if (level == null)
 {
 
 }
@@ -20,14 +18,7 @@ else
 }
 @code {
     [Parameter]
-    private string SessionUID { get; set; }
-
-    GameService.Level level;
-
-    protected override async Task OnInitAsync()
-    {
-        level = GameService.Sessions.FirstOrDefault(n => n.UID == SessionUID).Level;
-    }
+    private Game.DataModels.Level level { get; set; }
 
     public int SVGCoord(int p)
     {

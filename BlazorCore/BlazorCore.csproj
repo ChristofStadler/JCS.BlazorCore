@@ -6,7 +6,14 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Remove="Game\Levels\FourPlayerLevel.json" />
+    <Content Remove="Game\Levels\TwoPlayerLevel.json" />
     <Content Remove="scripts\app.ts" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="Game\Levels\FourPlayerLevel.json" />
+    <Compile Include="Game\Levels\TwoPlayerLevel.json" />
   </ItemGroup>
 
   <ItemGroup>

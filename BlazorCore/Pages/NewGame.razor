@@ -1,0 +1,13 @@
+﻿@page "/NewGame"
+@inherits SessionComponent
+
+<h1>Game</h1>
+
+@{
+    NewGame();
+
+    if (session != null)
+    {
+        <Level level="@session.Level"></Level>
+    }
+}

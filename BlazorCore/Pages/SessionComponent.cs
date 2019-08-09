@@ -17,9 +17,10 @@ namespace BlazorCore.Pages
         IJSRuntime JSRuntime { get; set; }
 
         [Inject]
-        public GameService GameService { get; set; }
+        public LobbyService LobbyService { get; set; }
         
-        public GameService.Player player;
+        public Game.DataModels.Player player;
+        public Game.DataModels.Session session;
 
         bool loaded = false;
 
@@ -36,11 +37,18 @@ namespace BlazorCore.Pages
 
             if (player == null && loaded == false)
             {
-                player = await GameService.GetPlayer(JSRuntime);
+                player = await LobbyService.GetCurrentPlayer(JSRuntime);
                 loaded = true;
 
                 StateHasChanged();
             }
+        }
+
+        public void NewGame()
+        {
+            var session = LobbyService.SessionManager.Create(Game.Constants.GameMode.FourPlayer, player);
+            LobbyService.Sessions.Add(session);
+            session = LobbyService.Sessions.FirstOrDefault(n => n.UID == session.UID);
         }
     }
 }
