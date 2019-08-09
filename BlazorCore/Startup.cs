@@ -9,7 +9,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using BlazorCore.Data;
-using Cloudcrate.AspNetCore.Blazor.Browser.Storage;
 
 namespace BlazorCore
 {
@@ -28,9 +27,9 @@ namespace BlazorCore
         {
             services.AddRazorPages();
             services.AddServerSideBlazor();
-            services.AddStorage();
             services.AddSingleton<WeatherForecastService>();
-            services.AddSingleton<Game.GameService>();
+            //services.AddSingleton<Services.AccountService>();
+            services.AddSingleton<Services.GameService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

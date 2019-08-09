@@ -1,19 +1,23 @@
-﻿@using BlazorCore.Game
+﻿@using BlazorCore.Services
 @inject GameService GameService
-    <div class="game-level">
-        @foreach (var cell in level.Cells)
-        {
-            <div class="cell"></div>
-        }
+@if (level == null)
+{
+
+}
+else
+{
+    <div style="padding: 5px; background: black; float: left;">
+        <svg width="@level.Size.WidthPX" height="@level.Size.HeightPX" class="game-level">
+            @for (int x = 0; x < level.Cells.GetLength(0); x++)
+            {
+                for (int y = 0; y < level.Cells.GetLength(1); y++)
+                {
+                    <rect x="@SVGCoord(x)" y="@SVGCoord(y)" width="@level.Size.CellPX" height="@level.Size.CellPX" fill="@level.Cells[x,y].Color" stroke="#999999" stroke-width="1" />
+                }
+            }
+        </svg>
     </div>
-<style>
-    .game-level cell {
-        float: left;
-        width: 4px;
-        height: 4px;
-        box-shadow: 1px 1px #808080;
-    }
-</style>
+}
 @code {
     [Parameter]
     private string SessionUID { get; set; }
@@ -23,5 +27,10 @@
     protected override async Task OnInitAsync()
     {
         level = GameService.Sessions.FirstOrDefault(n => n.UID == SessionUID).Level;
+    }
+
+    public int SVGCoord(int p)
+    {
+        return p * level.Size.CellPX;
     }
 }

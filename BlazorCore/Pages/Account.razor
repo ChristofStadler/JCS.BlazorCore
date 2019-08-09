@@ -1,54 +1,49 @@
 ﻿@page "/account"
-@using BlazorCore.Game
-@inject GameService GameService
-
-@using Cloudcrate.AspNetCore.Blazor.Browser.Storage;
-@inject LocalStorage Storage
+@inherits SessionComponent
 
 <h3>Account</h3>
 
-<EditForm Model="@player" OnValidSubmit="@SaveProfile">
-    <DataAnnotationsValidator />
-    <ValidationSummary />
+@if (player == null)
+{
+    <p>Loading...</p>
+}
+else
+{
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-sm-4">
+                <EditForm Model="@player" OnValidSubmit="@SaveProfile">
+                    <DataAnnotationsValidator />
+                    <ValidationSummary />
 
-    <InputText id="name" @bind-Value="@player.Name" />
+                    <div class="form-group">
+                        <label for="name">Username</label>
+                        <InputText class="form-control" id="name" @bind-Value="@player.Name" />
+                    </div>
 
-    <button type="submit">Submit</button>
-</EditForm>
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </EditForm>
+                @if (success)
+                {
+                    <br />
+                    <div class="alert alert-success" role="alert">Account Updated</div>
+                }
+            </div>
+        </div>
+    </div>
+}
+
 
 @code {
-    private GameService.Player player;
+    bool success = false;
 
     private void SaveProfile()
     {
-        Console.WriteLine("OnValidSubmit");
+        success = true;
     }
 
     protected override async Task OnInitAsync()
     {
-        player = GetPlayer();
-    }
 
-    public GameService.Player GetPlayer()
-    {
-        var player = GameService.Players.FirstOrDefault(n => n.UID == GetUID());
-        if (player == null)
-        {
-            GameService.Players.Add(new GameService.Player()
-            {
-                UID = GetUID()
-            });
-            player = GameService.Players.FirstOrDefault(n => n.UID == GetUID());
-        }
-
-        return player;
-    }
-
-    public string GetUID()
-    {
-        if (String.IsNullOrEmpty(Storage["UID"]))
-            Storage["UID"] = Guid.NewGuid().ToString();
-
-        return Storage["UID"];
     }
 }
