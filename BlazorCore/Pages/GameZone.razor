@@ -22,12 +22,26 @@
         }
         else if (session.Status == Game.Constants.GameStatus.Start)
         {
-            // Count Down Timer
+            <div style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: rgba(135, 135, 135, 0.5); display: flex; align-items: center; justify-content: center;">
+                <h3 style="padding-left: 40px; padding-right: 40px; background: black; color: white;">STARTING GAME @session.StartCounter</h3>
+            </div>
         }
-        else if (session.Status == Game.Constants.GameStatus.Ended && session.Players.Any(n => n.UID == player.UID && n.Status == Game.Constants.PawnStatus.Alive))
+        else if (session.Status == Game.Constants.GameStatus.Ended && session.Players.Any(n => n.UID == player.UID && n.Round.Wins == 1))
         {
             <div style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: rgba(135, 135, 135, 0.5); display: flex; align-items: center; justify-content: center;">
                 <h3 style="padding-left: 40px; padding-right: 40px; background: black; color: white;">YOU WIN!</h3>
+            </div>
+        }
+        else if (session.Status == Game.Constants.GameStatus.Ended && session.Players.Any(n => n.UID == player.UID && n.Round.Escapes == 1))
+        {
+            <div style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: rgba(135, 135, 135, 0.5); display: flex; align-items: center; justify-content: center;">
+                <h3 style="padding-left: 40px; padding-right: 40px; background: black; color: white;">YOU ESCAPED</h3>
+            </div>
+        }
+        else if (session.Status == Game.Constants.GameStatus.Ended && session.Players.Any(n => n.UID == player.UID && n.Round.Survived == 1))
+        {
+            <div style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: rgba(135, 135, 135, 0.5); display: flex; align-items: center; justify-content: center;">
+                <h3 style="padding-left: 40px; padding-right: 40px; background: black; color: white;">YOU SURVIVED</h3>
             </div>
         }
         else

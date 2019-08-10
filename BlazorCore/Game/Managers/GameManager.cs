@@ -22,6 +22,11 @@ namespace BlazorCore.Game.Managers
 
         public int MoveCounter = 1;
 
+        public int TickRate = 1000;
+
+        private int TickRateIdle = 1000;
+        private int TickRatePlay = 100;
+
         public void SpawnPlayers() {
             for (int i = 0; i < LobbyService.Sessions[UID].Players.GetLength(0); i++)
             {
@@ -49,7 +54,7 @@ namespace BlazorCore.Game.Managers
                     StartGame(); // Start game if conditions met.
                     MovePawns(); // Move pawns if conditions met.
                     EndGame(); // End game if one player left and the rest dead.
-                    System.Threading.Thread.Sleep(500); // TODO: Tick counter 250, PawnMovement 500, SpeedBoost = 250
+                    System.Threading.Thread.Sleep(TickRate); // TODO: Tick counter 100, PawnMovement 200, SpeedBoost = 100
                 }
             }
             catch(Exception ex)
@@ -60,10 +65,34 @@ namespace BlazorCore.Game.Managers
 
         public void StartGame()
         {
-            if(LobbyService.Sessions[UID].Status != Constants.GameStatus.Ended && !LobbyService.Sessions[UID].Players.Any(n => n == null))
+            // THE GAME IS IN PLAY, SO NOTHING ELSE TO DO
+            if (LobbyService.Sessions[UID].Status == Constants.GameStatus.Play)
             {
+
+            }
+            // GAME FULL, START TIMER
+            else if (LobbyService.Sessions[UID].Status == Constants.GameStatus.WaitingForPlayers && !LobbyService.Sessions[UID].Players.Any(n => n == null))
+            {
+                LobbyService.Sessions[UID].Status = Constants.GameStatus.Start;
+            }
+            // COUNT DOWN
+            else if (LobbyService.Sessions[UID].Status == Constants.GameStatus.Start && LobbyService.Sessions[UID].StartCounter > 0)
+            {
+                LobbyService.Sessions[UID].StartCounter--;
+            }
+            // PLAY GAME!
+            else if (LobbyService.Sessions[UID].Status == Constants.GameStatus.Start && LobbyService.Sessions[UID].StartCounter == 0)
+            {
+                TickRate = TickRatePlay;
                 LobbyService.Sessions[UID].Status = Constants.GameStatus.Play;
             }
+
+            // TODO: End game restart
+
+            //if (LobbyService.Sessions[UID].Status != Constants.GameStatus.Ended && !LobbyService.Sessions[UID].Players.Any(n => n == null))
+            //{
+            //    LobbyService.Sessions[UID].Status = Constants.GameStatus.Play;
+            //}
         }
 
         public void EndGame()
@@ -73,6 +102,51 @@ namespace BlazorCore.Game.Managers
                 LobbyService.Sessions[UID].Players.Count(n => n.Status == Constants.PawnStatus.Alive) == 1) // One player left standing
             {
                 LobbyService.Sessions[UID].Status = Constants.GameStatus.Ended;
+                TickRate = TickRateIdle;
+
+                var winner = LobbyService.Sessions[UID].Players.OrderByDescending(n => n.Round.Score).FirstOrDefault(n => n.Status == Constants.PawnStatus.Alive);
+                winner.Stats.Wins++;
+                winner.Round.Wins++;
+
+                foreach (var player in LobbyService.Sessions[UID].Players)
+                {
+                    player.Stats.Games++;
+
+                    if (player.Status == Constants.PawnStatus.Alive)
+                        Score(Constants.Score.Survive, player.UID);
+
+                    // Award scores for staying till the end.
+                    LobbyService.Players.FirstOrDefault(n => n.UID == player.UID).AddStats(player.Stats);
+                }
+            }
+        }
+
+        public void Score(Constants.Score score, string uid)
+        {
+            LobbyService.Sessions[UID].Players.FirstOrDefault(n => n.UID == uid).Stats.Score += (int)score;
+            LobbyService.Sessions[UID].Players.FirstOrDefault(n => n.UID == uid).Round.Score += (int)score;
+            switch(score)
+            {
+                case Constants.Score.Kill:
+                    LobbyService.Sessions[UID].Players.FirstOrDefault(n => n.UID == uid).Stats.Kills++;
+                    LobbyService.Sessions[UID].Players.FirstOrDefault(n => n.UID == uid).Round.Kills++;
+                    break;
+                case Constants.Score.Suicide:
+                    LobbyService.Sessions[UID].Players.FirstOrDefault(n => n.UID == uid).Stats.Suicides++;
+                    LobbyService.Sessions[UID].Players.FirstOrDefault(n => n.UID == uid).Round.Suicides++;
+                    break;
+                case Constants.Score.Escape:
+                    LobbyService.Sessions[UID].Players.FirstOrDefault(n => n.UID == uid).Stats.Escapes++;
+                    LobbyService.Sessions[UID].Players.FirstOrDefault(n => n.UID == uid).Round.Escapes++;
+                    break;
+                case Constants.Score.Survive:
+                    LobbyService.Sessions[UID].Players.FirstOrDefault(n => n.UID == uid).Stats.Survived++;
+                    LobbyService.Sessions[UID].Players.FirstOrDefault(n => n.UID == uid).Round.Survived++;
+                    break;
+                case Constants.Score.PickUp:
+                    LobbyService.Sessions[UID].Players.FirstOrDefault(n => n.UID == uid).Stats.Pickups++;
+                    LobbyService.Sessions[UID].Players.FirstOrDefault(n => n.UID == uid).Round.Pickups++;
+                    break;
             }
         }
 
@@ -105,7 +179,7 @@ namespace BlazorCore.Game.Managers
                         var player = LobbyService.Sessions[UID].Players[i];
                         var cell = LobbyService.Sessions[UID].Level.Cells[player.Coord.X, player.Coord.Y];
 
-                        CheckCollision(cell.Type, player.UID);
+                        CheckCollision(cell, player.UID);
 
                         LobbyService.Sessions[UID].Level.Cells[player.Coord.X, player.Coord.Y] = new Cell
                         {
@@ -121,14 +195,21 @@ namespace BlazorCore.Game.Managers
             }
         }
 
-        public void CheckCollision(Constants.CellType cell, string uid) {
-            switch(cell)
+        public void CheckCollision(Cell cell, string uid) {
+            switch(cell.Type)
             {
                 case Constants.CellType.Player:
                     KillPawn(uid);
+                    if (uid == cell.PlayerUID)
+                        Score(Constants.Score.Suicide, uid);
+                    else
+                        Score(Constants.Score.Kill, cell.PlayerUID);
                     break;
                 case Constants.CellType.Wall:
                     KillPawn(uid);
+                    break;
+                case Constants.CellType.Escape:
+                    EscapePawn(uid);
                     break;
             }
         }
@@ -136,6 +217,14 @@ namespace BlazorCore.Game.Managers
         public void KillPawn(string uid)
         {
             LobbyService.Sessions[UID].Players.FirstOrDefault(n => n.UID == uid).Status = Constants.PawnStatus.Dead;
+            // TODO: Fade out player. Fade out trail.
+        }
+
+        public void EscapePawn(string uid)
+        {
+            // TODO: Fade out trail.
+            LobbyService.Sessions[UID].Players.FirstOrDefault(n => n.UID == uid).Status = Constants.PawnStatus.Escaped;
+            Score(Constants.Score.Escape, uid);
         }
 
         public GameManager(string uid)

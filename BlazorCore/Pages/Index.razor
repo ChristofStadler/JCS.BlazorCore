@@ -1,4 +1,5 @@
 ﻿@page "/"
+@using System.Threading
 @using BlazorCore.Services
 @*@inject GameService GameService*@
 @inherits SessionComponent
@@ -67,12 +68,12 @@ else
                         }
                         else
                         {
-                            @foreach (var player in LobbyService.Players)
+                            @foreach (var player in LobbyService.Players.OrderByDescending(n => n.Stats.Score))
                             {
                                 <tr>
                                     <td>@player.UID</td>
                                     <td>@player.Name</td>
-                                    <td>@player.Score</td>
+                                    <td>@player.Stats.Score</td>
                                 </tr>
                             }
                         }
@@ -84,5 +85,22 @@ else
 }
 
 @code {
+    CancellationTokenSource pollingCancellationToken;
 
+    protected override void OnParametersSet()
+    {
+        pollingCancellationToken?.Cancel();
+        PollForUpdates();
+    }
+
+    async void PollForUpdates()
+    {
+        pollingCancellationToken = new CancellationTokenSource();
+        while (!pollingCancellationToken.IsCancellationRequested)
+        {
+            StateHasChanged();
+
+            await Task.Delay(1000);
+        }
+    }
 }

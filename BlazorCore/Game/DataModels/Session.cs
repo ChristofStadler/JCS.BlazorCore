@@ -17,6 +17,8 @@ namespace BlazorCore.Game.DataModels
         public GameMode Mode { get; set; }
         public bool Multiplayer { get; set; }
 
+        public int StartCounter { get; set; } = 5;
+
         public Task Task { get; set; }
 
         public string GetStatus()

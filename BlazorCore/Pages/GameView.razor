@@ -9,15 +9,23 @@
                 <thead>
                     <tr>
                         <th>Name</th>
+                        <th>Games</th>
+                        <th>Wins</th>
+                        <th>Kills</th>
+                        <th>Escapes</th>
                         <th>Score</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach (var player in session.Players.Where(n => n != null).OrderByDescending(n => n.Score))
+                    @foreach (var player in session.Players.Where(n => n != null).OrderByDescending(n => n.Stats.Score))
                     {
-                        <tr>
+                        <tr class="@Game.Constants.ColorClass(player.Color)">
                             <td>@player.Name</td>
-                            <td>@player.Score</td>
+                            <td>@player.Stats.Games</td>
+                            <td>@player.Stats.Wins</td>
+                            <td>@player.Stats.Kills</td>
+                            <td>@player.Stats.Escapes</td>
+                            <td>@player.Stats.Score</td>
                         </tr>
                     }
                 </tbody>
@@ -47,7 +55,7 @@
         {
             StateHasChanged();
 
-            await Task.Delay(500);
+            await Task.Delay(20);
         }
     }
 }

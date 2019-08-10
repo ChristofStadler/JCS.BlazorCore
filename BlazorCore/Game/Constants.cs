@@ -11,7 +11,8 @@ namespace BlazorCore.Game
         public enum GameMode { SinglePlayer, TwoPlayer, FourPlayer, FreeForAll }
         public enum Direction { Up, Down, Left, Right }
         public enum CellType { Player, Empty, Fuel, Boost, Energy, Wall, Escape }
-        public enum PawnStatus { Spawn, Alive, Dead}
+        public enum PawnStatus { Spawn, Alive, Dead, Escaped }
+        public enum Score { Escape = 80, Kill = 40, Suicide = -40, Survive = 20, PickUp = 10 }
 
         public static readonly int CellPixels = 8;
 
@@ -29,6 +30,23 @@ namespace BlazorCore.Game
                     return GameMode.FourPlayer;
                 default:
                     return GameMode.TwoPlayer;
+            }
+        }
+
+        public static string ColorClass(string color)
+        {
+            switch (color)
+            {
+                case "red":
+                    return "bg-danger";
+                case "blue":
+                    return "bg-primary";
+                case "green":
+                    return "bg-success";
+                case "orange":
+                    return "bg-warning";
+                default:
+                    return "";
             }
         }
     }

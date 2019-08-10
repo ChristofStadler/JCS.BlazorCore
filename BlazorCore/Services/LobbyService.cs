@@ -63,7 +63,6 @@ namespace BlazorCore.Services
                         {
                             UID = player.UID,
                             Name = player.Name,
-                            Score = 0,
                             Color = PlayerColors[i],
                             Coord = Sessions[uid].Level.Spawns[i].Coord,
                             Direction = Sessions[uid].Level.Spawns[i].Direction
