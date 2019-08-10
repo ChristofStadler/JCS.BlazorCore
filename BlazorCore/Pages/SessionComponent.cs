@@ -1,4 +1,5 @@
-﻿using BlazorCore.Services;
+﻿using BlazorCore.Game.DataModels;
+using BlazorCore.Services;
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 using System;
@@ -18,11 +19,12 @@ namespace BlazorCore.Pages
 
         [Inject]
         public LobbyService LobbyService { get; set; }
-        
+
         public Game.DataModels.Player player;
+        //public string sessionKey;
         public Game.DataModels.Session session;
 
-        bool loaded = false;
+        public bool loaded = false;
 
         protected override async Task OnAfterRenderAsync()
         {
@@ -44,11 +46,47 @@ namespace BlazorCore.Pages
             }
         }
 
-        public void NewGame()
+        public void NewGame(Game.Constants.GameMode mode)
         {
-            var session = LobbyService.SessionManager.Create(Game.Constants.GameMode.FourPlayer, player);
-            LobbyService.Sessions.Add(session);
-            session = LobbyService.Sessions.FirstOrDefault(n => n.UID == session.UID);
+            var uid = LobbyService.Create(mode, player, JSRuntime);
+            session = LobbyService.Sessions[uid];
+        }
+
+        public bool JoinGame(string uid)
+        {
+            if(LobbyService.Join(uid, player, JSRuntime))
+            {
+                session = LobbyService.Sessions[uid];
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        public bool QuickPlay(Game.Constants.GameMode mode)
+        {
+            // Find game with spots open.
+            var sesh = LobbyService.Sessions.FirstOrDefault(n => n.Value.Mode == mode && n.Value.Status == Game.Constants.GameStatus.WaitingForPlayers && n.Value.Players.Any(x => x == null)).Value;
+
+            if (sesh == null) // Create a new game if none exist.
+            {
+                NewGame(mode);
+                return true;
+            }
+            else
+            {
+                if (LobbyService.Join(sesh.UID, player, JSRuntime))
+                {
+                    session = LobbyService.Sessions[sesh.UID];
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
         }
     }
 }

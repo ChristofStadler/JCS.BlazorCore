@@ -27,7 +27,7 @@ else
                         </tr>
                     </thead>
                     <tbody>
-                        @if (GameService.Sessions == null || GameService.Sessions.Count() == 0)
+                        @if (LobbyService.Sessions == null || LobbyService.Sessions.Count() == 0)
                         {
                             <tr>
                                 <td colspan="4" style="text-align: center">No games at the moment.</td>
@@ -35,13 +35,13 @@ else
                         }
                         else
                         {
-                            @foreach (var session in GameService.Sessions)
+                            @foreach (var k in LobbyService.Sessions)
                             {
                                 <tr>
-                                    <td>@session.UID</td>
-                                    <td>@session.Players.Count()</td>
-                                    <td>@session.GetStatus</td>
-                                    <td><button>Join</button></td>
+                                    <td>@k.Value.UID</td>
+                                    <td>@k.Value.Players.Where(n => n != null).Count() / @k.Value.Players.GetLength(0)</td>
+                                    <td>@k.Value.GetStatus()</td>
+                                    <td><a class="btn btn-secondary" href="joingame/@k.Value.UID" role="button">Join</a></td>
                                 </tr>
                             }
                         }
@@ -59,7 +59,7 @@ else
                         </tr>
                     </thead>
                     <tbody>
-                        @if (GameService.Players == null || GameService.Players.Count() == 0)
+                        @if (LobbyService.Players == null || LobbyService.Players.Count() == 0)
                         {
                             <tr>
                                 <td colspan="4" style="text-align: center">Leaderboard is empty.</td>
@@ -67,7 +67,7 @@ else
                         }
                         else
                         {
-                            @foreach (var player in GameService.Players)
+                            @foreach (var player in LobbyService.Players)
                             {
                                 <tr>
                                     <td>@player.UID</td>

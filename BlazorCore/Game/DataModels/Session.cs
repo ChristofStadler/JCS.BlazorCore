@@ -18,5 +18,24 @@ namespace BlazorCore.Game.DataModels
         public bool Multiplayer { get; set; }
 
         public Task Task { get; set; }
+
+        public string GetStatus()
+        {
+            switch (Status)
+            {
+                case GameStatus.WaitingForPlayers:
+                    return "Waiting for players";
+                case GameStatus.Play:
+                    return "Play";
+                case GameStatus.Start:
+                    return "Start";
+                case GameStatus.Ended:
+                    return "Ended";
+                case GameStatus.Paused:
+                    return "Paused";
+                default:
+                    return "";
+            }
+        }
     }
 }

@@ -1,0 +1,39 @@
+﻿@inherits GameZoneComponent
+    <div style="padding: 5px; background: black; float: left; position: relative;">
+        <svg width="@session.Level.Size.WidthPX" height="@session.Level.Size.HeightPX" class="game-level">
+            @for (int x = 0; x < session.Level.Cells.GetLength(0); x++)
+            {
+                for (int y = 0; y < session.Level.Cells.GetLength(1); y++)
+                {
+                    <rect x="@SVGCoord(x)" y="@SVGCoord(y)" width="@session.Level.Size.CellPX" height="@session.Level.Size.CellPX" fill="@session.Level.Cells[x,y].Color" stroke="#dddddd" stroke-width="1" />
+                }
+            }
+        </svg>
+
+        @if (session.Status == Game.Constants.GameStatus.Play)
+        {
+
+        }
+        else if (session.Status == Game.Constants.GameStatus.WaitingForPlayers)
+        {
+            <div style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: rgba(135, 135, 135, 0.5); display: flex; align-items: center; justify-content: center;">
+                <h3 style="padding-left: 40px; padding-right: 40px; background: black; color: white;">WAITING FOR PLAYERS @session.Players.Count(n => n != null) /  @session.PlayersMax</h3>
+            </div>
+        }
+        else if (session.Status == Game.Constants.GameStatus.Start)
+        {
+            // Count Down Timer
+        }
+        else if (session.Status == Game.Constants.GameStatus.Ended && session.Players.Any(n => n.UID == player.UID && n.Status == Game.Constants.PawnStatus.Alive))
+        {
+            <div style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: rgba(135, 135, 135, 0.5); display: flex; align-items: center; justify-content: center;">
+                <h3 style="padding-left: 40px; padding-right: 40px; background: black; color: white;">YOU WIN!</h3>
+            </div>
+        }
+        else
+        {
+            <div style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: rgba(135, 135, 135, 0.5); display: flex; align-items: center; justify-content: center;">
+                <h3 style="padding-left: 40px; padding-right: 40px; background: black; color: white;">YOU LOSE!</h3>
+            </div>
+        }
+    </div>

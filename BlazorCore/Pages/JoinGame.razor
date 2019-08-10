@@ -1,0 +1,20 @@
+﻿@page "/JoinGame/{uid}"
+@inherits SessionComponent
+<h3>JoinGame</h3>
+@if (loaded)
+{
+    if (JoinGame(UID))
+    {
+        <GameView session="@session"></GameView>
+    }
+    else
+    {
+        <br />
+        <div class="alert alert-danger" role="alert">Game Full</div>
+    }
+}
+
+@code {
+    [Parameter]
+    private string UID { get; set; }
+}

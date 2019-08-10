@@ -1,0 +1,53 @@
+﻿@using System.Threading
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm">
+            <GameZone session="@session" player="player"></GameZone>
+        </div>
+        <div class="col-sm">
+            <table class="table table-sm table-dark">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Score</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var player in session.Players.Where(n => n != null).OrderByDescending(n => n.Score))
+                    {
+                        <tr>
+                            <td>@player.Name</td>
+                            <td>@player.Score</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+@code {
+    [Parameter]
+    public Game.DataModels.Player player { get; set; }
+
+    [Parameter]
+    public Game.DataModels.Session session { get; set; }
+
+    CancellationTokenSource pollingCancellationToken;
+
+    protected override void OnParametersSet()
+    {
+        pollingCancellationToken?.Cancel();
+        PollForUpdates();
+    }
+
+    async void PollForUpdates()
+    {
+        pollingCancellationToken = new CancellationTokenSource();
+        while (!pollingCancellationToken.IsCancellationRequested)
+        {
+            StateHasChanged();
+
+            await Task.Delay(500);
+        }
+    }
+}

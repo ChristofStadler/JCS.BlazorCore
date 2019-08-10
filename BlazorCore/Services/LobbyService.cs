@@ -16,10 +16,11 @@ namespace BlazorCore.Services
 
         #region SessionManagement
         private LevelManager levelManager = new LevelManager();
-        public string Create(GameMode mode, Player player)
+        public string Create(GameMode mode, Player player, IJSRuntime jsRuntime)
         {
+            var uid = Guid.NewGuid().ToString();
             var session = new Session();
-            session.UID = Guid.NewGuid().ToString();
+            session.UID = uid;
             session.Multiplayer = true;
             session.Mode = mode;
             session.Status = GameStatus.WaitingForPlayers;
@@ -28,7 +29,7 @@ namespace BlazorCore.Services
             {
                 case GameMode.TwoPlayer:
                     session.PlayersMax = 2;
-                    session.Level = levelManager.CreateLevel(50, 50, 2);
+                    session.Level = levelManager.CreateLevel(80, 80, 2);
                     session.Players = new Pawn[2];
                     break;
                 case GameMode.FourPlayer:
@@ -38,26 +39,39 @@ namespace BlazorCore.Services
                     break;
             }
 
-            Sessions.Add(session.UID, session);
+            Sessions.Add(uid, session);
+            Join(uid, player, jsRuntime);
 
-            return session.UID;
+            Task.Run(() => new GameManager(uid).Play());
+
+            return uid;
         }
-        public bool Join(string uid, Player player)
+        public bool Join(string uid, Player player, IJSRuntime jsRuntime)
         {
-            for (int i = 0; i < Sessions[uid].Players.GetLength(0); i++)
+            if (Sessions[uid]?.Players?.Any(n => n != null && n.UID == player.UID) ?? false) // Player already in game!
             {
-                if (Sessions[uid].Players[i] == null)
+                Task.Run(() => jsRuntime.InvokeAsync<object>("App.LocalStorageSet", "Session", uid));
+                return true;
+            }
+            else
+            {
+                for (int i = 0; i < Sessions[uid].Players.GetLength(0); i++)
                 {
-                    Sessions[uid].Players[i] = new Pawn()
+                    if (Sessions[uid].Players[i] == null)
                     {
-                        UID = player.UID,
-                        Color = PlayerColors[i],
-                        Coord = Sessions[uid].Level.Spawns[i].Coord,
-                        Direction = Sessions[uid].Level.Spawns[i].Direction
-                    };
+                        Sessions[uid].Players[i] = new Pawn()
+                        {
+                            UID = player.UID,
+                            Name = player.Name,
+                            Score = 0,
+                            Color = PlayerColors[i],
+                            Coord = Sessions[uid].Level.Spawns[i].Coord,
+                            Direction = Sessions[uid].Level.Spawns[i].Direction
+                        };
 
-
-                    return true;
+                        Task.Run(() => jsRuntime.InvokeAsync<object>("App.LocalStorageSet", "Session", uid));
+                        return true;
+                    }
                 }
             }
 
@@ -76,7 +90,7 @@ namespace BlazorCore.Services
             {
                 player = new Player()
                 {
-                    UID = uid
+                    UID = uid,
                 };
                 Players.Add(player);
             }
@@ -86,35 +100,18 @@ namespace BlazorCore.Services
 
         public async Task<string> GetCurrentPlayerUID(IJSRuntime jsRuntime)
         {
-            string uid = await jsRuntime.InvokeAsync<string>("app.GetUID");
+            string uid = await jsRuntime.InvokeAsync<string>("App.LocalStorageGet", "UID");
 
             if (String.IsNullOrEmpty(uid))
             {
                 uid = Guid.NewGuid().ToString();
-                await jsRuntime.InvokeAsync<object>("app.SetUID", uid);
+                await jsRuntime.InvokeAsync<object>("App.LocalStorageSet", "UID", uid);
             }
 
             return uid;
         }
         #endregion
 
-        //public static string GameStatusString(GameStatus status)
-        //{
-        //    switch(status)
-        //    {
-        //        case GameStatus.WaitingForPlayers:
-        //            return "Waiting for players";
-        //        case GameStatus.Play:
-        //            return "Play";
-        //        case GameStatus.Start:
-        //            return "Start";
-        //        case GameStatus.Ended:
-        //            return "Ended";
-        //        case GameStatus.Paused:
-        //            return "Paused";
-        //        default:
-        //            return "";
-        //    }
-        //}
+
     }
 }

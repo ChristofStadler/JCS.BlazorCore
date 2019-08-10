@@ -10,8 +10,12 @@ namespace BlazorCore.Game.DataModels
     {
         public string UID { get; set; }
         public string Color { get; set; }
+        public string Name { get; set; }
+        public int Score { get; set; }
         public Coord Coord { get; set; }
         public List<Coord> Moves { get; set; }
+        public int Boost { get; set; } = 3;
+        public int BoostCounter { get; set; } = 0;
         public PawnStatus Status { get; set; }
         public Direction Direction { get; set; }
     }

@@ -29,7 +29,7 @@ namespace BlazorCore
             services.AddServerSideBlazor();
             services.AddSingleton<WeatherForecastService>();
             //services.AddSingleton<Services.AccountService>();
-            services.AddSingleton<Services.GameService>();
+            services.AddSingleton<Services.LobbyService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

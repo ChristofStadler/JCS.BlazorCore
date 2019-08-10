@@ -8,7 +8,6 @@
   <ItemGroup>
     <Content Remove="Game\Levels\FourPlayerLevel.json" />
     <Content Remove="Game\Levels\TwoPlayerLevel.json" />
-    <Content Remove="scripts\app.ts" />
   </ItemGroup>
 
   <ItemGroup>
