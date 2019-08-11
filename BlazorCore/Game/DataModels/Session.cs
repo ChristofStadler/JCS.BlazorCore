@@ -35,6 +35,8 @@ namespace BlazorCore.Game.DataModels
                     return "Ended";
                 case GameStatus.Paused:
                     return "Paused";
+                case GameStatus.SessionEnded:
+                    return "Session Ended";
                 default:
                     return "";
             }

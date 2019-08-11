@@ -1,0 +1,69 @@
+﻿.gz-player {
+    outline-color: #dddddd;
+    outline-style: solid;
+    outline-width: 1px;
+    outline-offset: -1px;
+    width: 8px;
+    height: 8px;
+}
+.gz-escape {
+    fill: lime;
+    width: 8px;
+    height: 8px;
+}
+.gz-wall {
+    outline-color: #666666;
+    outline-style: solid;
+    outline-width: 1px;
+    outline-offset: -1px;
+    fill: #333333;
+    width: 8px;
+    height: 8px;
+}
+.gz-empty {
+    outline-color: #dddddd;
+    outline-style: solid;
+    outline-width: 1px;
+    outline-offset: -1px;
+    fill: #eeeeee;
+    width: 8px;
+    height: 8px;
+}
+.gz-player-head {
+    width: 8px;
+    height: 8px;
+}
+
+.gz-red {
+    fill: red;
+}
+
+.gz-blue {
+    fill: blue;
+}
+
+.gz-green {
+    fill: green;
+}
+
+.gz-orange {
+    fill: orange;
+}
+
+.game-view {
+    font-size: 0.75rem;
+}
+
+.game-view .table h4 {
+    font-size: 1rem;
+    font-weight: bold;
+    margin-bottom: 0;
+}
+
+.gz-stats {
+    margin-bottom: 1rem;
+}
+
+.gz-stats .table {
+    margin-bottom: 0;
+}

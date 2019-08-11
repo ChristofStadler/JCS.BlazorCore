@@ -15,5 +15,11 @@ namespace BlazorCore.Game.DataModels
             X = x;
             Y = y;
         }
+
+        public Coord(Coord coord)
+        {
+            X = coord.X;
+            Y = coord.Y;
+        }
     }
 }

@@ -7,11 +7,12 @@ namespace BlazorCore.Game
 {
     public static class Constants
     {
-        public enum GameStatus { WaitingForPlayers, Play, Paused, Ended, Start }
+        public enum GameStatus { WaitingForPlayers, Play, Paused, Ended, Start, SessionEnded }
         public enum GameMode { SinglePlayer, TwoPlayer, FourPlayer, FreeForAll }
         public enum Direction { Up, Down, Left, Right }
-        public enum CellType { Player, Empty, Fuel, Boost, Energy, Wall, Escape }
-        public enum PawnStatus { Spawn, Alive, Dead, Escaped }
+        public enum CellType { None, Player, Empty, Fuel, Boost, Energy, Wall, Escape, PlayerHead }
+        public enum CellSubType { None, PlayerHead }
+        public enum PawnStatus { Ready, Alive, Dead, Escaped, Spawn }
         public enum Score { Escape = 80, Kill = 40, Suicide = -40, Survive = 20, PickUp = 10 }
 
         public static readonly int CellPixels = 8;

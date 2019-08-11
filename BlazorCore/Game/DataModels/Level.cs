@@ -18,26 +18,37 @@ namespace BlazorCore.Game.DataModels
     public class Cell
     {
         public string PlayerUID { get; set; }
-        public string Color { get; set; } = "#eeeeee";
         public CellType Type { get; set; } = CellType.Empty;
-
         public DateTime Created { get; set; } = DateTime.Now;
+        public string CssClass { get ; set; }
 
-        public Cell(CellType type = CellType.Empty)
+        public Cell(CellType type = CellType.Empty, string uid = "", string color = "")
         {
+            var colorClass = String.IsNullOrEmpty(color) ? "" : " gz-" + color;
+
+            PlayerUID = uid;
+
             switch(type)
             {
-                case CellType.Empty:
-                    Color = "#eeeeee";
+                case CellType.Player:
                     Type = type;
+                    CssClass = "gz-player" + colorClass;
+                    break;
+                case CellType.PlayerHead:
+                    Type = CellType.Player;
+                    CssClass = "gz-player-head" + colorClass;
+                    break;
+                case CellType.Empty:
+                    Type = type;
+                    CssClass = "gz-empty";
                     break;
                 case CellType.Escape:
-                    Color = "lime";
                     Type = type;
+                    CssClass = "gz-escape";
                     break;
                 case CellType.Wall:
-                    Color = "#99999";
                     Type = type;
+                    CssClass = "gz-wall";
                     break;
             }
         }

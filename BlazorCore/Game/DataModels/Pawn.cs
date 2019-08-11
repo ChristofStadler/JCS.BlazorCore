@@ -19,5 +19,23 @@ namespace BlazorCore.Game.DataModels
         public Direction Direction { get; set; }
         public Stats Round { get; set; } = new Stats();
         public Stats Stats { get; set; } = new Stats();
+        public Cell PreviousCell { get; set; } = new Cell();
+
+        public string GetStatus()
+        {
+            switch(Status)
+            {
+                case PawnStatus.Alive:
+                    return "Alive";
+                case PawnStatus.Dead:
+                    return "Dead";
+                case PawnStatus.Escaped:
+                    return "Escaped";
+                case PawnStatus.Ready:
+                    return "Ready";
+                default:
+                    return "";
+            }
+        }
     }
 }

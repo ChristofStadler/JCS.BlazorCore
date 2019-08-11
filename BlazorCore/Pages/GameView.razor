@@ -1,35 +1,106 @@
 ﻿@using System.Threading
-<div class="container-fluid">
+@using Services
+@* TODO: Don't want lobby service here, just to get player name... *@
+@inject LobbyService LobbyService 
+<div class="container-fluid game-view">
     <div class="row">
         <div class="col-sm">
             <GameZone session="@session" player="player"></GameZone>
         </div>
         <div class="col-sm">
-            <table class="table table-sm table-dark">
-                <thead>
-                    <tr>
-                        <th>Name</th>
-                        <th>Games</th>
-                        <th>Wins</th>
-                        <th>Kills</th>
-                        <th>Escapes</th>
-                        <th>Score</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var player in session.Players.Where(n => n != null).OrderByDescending(n => n.Stats.Score))
-                    {
-                        <tr class="@Game.Constants.ColorClass(player.Color)">
-                            <td>@player.Name</td>
-                            <td>@player.Stats.Games</td>
-                            <td>@player.Stats.Wins</td>
-                            <td>@player.Stats.Kills</td>
-                            <td>@player.Stats.Escapes</td>
-                            <td>@player.Stats.Score</td>
+            <div class="gz-stats">
+                <table class="table table-sm table-dark">
+                    <thead>
+                        <tr>
+                            <th colspan="5"><h4>Round Stats</h4></th>
                         </tr>
-                    }
-                </tbody>
-            </table>
+                    </thead>
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Status</th>
+                            <th>Winner</th>
+                            <th>Escaped</th>
+                            <th>Kills</th>
+                            <th>Score</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var p in session.Players.Where(n => n != null).OrderByDescending(n => n.Round.Score))
+                        {
+                            <tr class="@Game.Constants.ColorClass(p.Color)">
+                                <td>@LobbyService.Players.FirstOrDefault(n => n.UID == p.UID).Name</td>
+                                <td>@p.GetStatus()</td>
+                                <td>@p.Round.Wins</td>
+                                <td>@p.Round.Escapes</td>
+                                <td>@p.Round.Kills</td>
+                                <td>@p.Round.Score</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+                <table class="table table-sm table-dark">
+                    <thead>
+                        <tr>
+                            <th colspan="5"><h4>Session Stats</h4></th>
+                        </tr>
+                    </thead>
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Games</th>
+                            <th>Wins</th>
+                            <th>Kills</th>
+                            <th>Escapes</th>
+                            <th>Score</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var p in session.Players.Where(n => n != null).OrderByDescending(n => n.Stats.Score))
+                        {
+                            <tr class="@Game.Constants.ColorClass(p.Color)">
+                                <td>@LobbyService.Players.FirstOrDefault(n => n.UID == p.UID).Name</td>
+                                <td>@p.Stats.Games</td>
+                                <td>@p.Stats.Wins</td>
+                                <td>@p.Stats.Escapes</td>
+                                <td>@p.Stats.Kills</td>
+                                <td>@p.Stats.Score</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+            <div class="alert alert-info" role="alert">
+                <p><strong>Controls</strong></p>
+                <table class="table table-sm table-borderless col-sm-6">
+                    <tbody>
+                        <tr>
+                            <th scope="row">A</th>
+                            <td>Left</td>
+                            <th>Z</th>
+                            <td>Turn Left</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">D</th>
+                            <td>Right</td>
+                            <th>X</th>
+                            <td>Turn Right</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">W</th>
+                            <td>Up</td>
+                            <th>Space</th>
+                            <td>Ready</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">S</th>
+                            <td>Down</td>
+                            <th></th>
+                            <td></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 </div>

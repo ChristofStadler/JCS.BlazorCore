@@ -15,7 +15,7 @@ namespace BlazorCore.Services
         public static List<Player> Players { get; set; } = new List<Player>();
 
         #region SessionManagement
-        private LevelManager levelManager = new LevelManager();
+        public LevelManager levelManager = new LevelManager();
         public string Create(GameMode mode, Player player, IJSRuntime jsRuntime)
         {
             var uid = Guid.NewGuid().ToString();
@@ -90,6 +90,7 @@ namespace BlazorCore.Services
                 player = new Player()
                 {
                     UID = uid,
+                    Name = "Player " + (Players.Count() + 1)
                 };
                 Players.Add(player);
             }

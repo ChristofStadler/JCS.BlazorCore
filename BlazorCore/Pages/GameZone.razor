@@ -5,7 +5,7 @@
             {
                 for (int y = 0; y < session.Level.Cells.GetLength(1); y++)
                 {
-                    <rect x="@SVGCoord(x)" y="@SVGCoord(y)" width="@session.Level.Size.CellPX" height="@session.Level.Size.CellPX" fill="@session.Level.Cells[x,y].Color" stroke="#dddddd" stroke-width="1" />
+                    <rect x="@SVGCoord(x)" y="@SVGCoord(y)" class="@session.Level.Cells[x,y].CssClass" />
                 }
             }
         </svg>

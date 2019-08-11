@@ -66,6 +66,11 @@ namespace BlazorCore.Pages
                 pressed = "turn-right";
                 PlayerTurn(Constants.Direction.Right, uid, sessionKey);
             }
+            else if (key.Contains(" "))
+            {
+                pressed = "space";
+                PlayerReady(uid, sessionKey);
+            }
             return pressed;
         }
 
@@ -74,9 +79,37 @@ namespace BlazorCore.Pages
             LobbyService.Sessions[sessionKey].Players.FirstOrDefault(n => n.UID == uid).Direction = dir;
         }
 
+        public static async void PlayerReady(string uid, string sessionKey)
+        {
+            if (LobbyService.Sessions[sessionKey].Status == Constants.GameStatus.Ended)
+                LobbyService.Sessions[sessionKey].Players.FirstOrDefault(n => n.UID == uid).Status = Constants.PawnStatus.Ready;
+        }
+
         public static async void PlayerTurn(Constants.Direction dir, string uid, string sessionKey)
         {
-
+            var player = LobbyService.Sessions[sessionKey].Players.FirstOrDefault(n => n.UID == uid);
+            if (dir == Constants.Direction.Left)
+            {
+                if (player.Direction == Constants.Direction.Left)
+                    player.Direction = Constants.Direction.Down;
+                else if(player.Direction == Constants.Direction.Down)
+                    player.Direction = Constants.Direction.Right;
+                else if (player.Direction == Constants.Direction.Right)
+                    player.Direction = Constants.Direction.Up;
+                else if (player.Direction == Constants.Direction.Up)
+                    player.Direction = Constants.Direction.Left;
+            }
+            else if (dir == Constants.Direction.Right)
+            {
+                if (player.Direction == Constants.Direction.Left)
+                    player.Direction = Constants.Direction.Up;
+                else if (player.Direction == Constants.Direction.Up)
+                    player.Direction = Constants.Direction.Right;
+                else if (player.Direction == Constants.Direction.Right)
+                    player.Direction = Constants.Direction.Down;
+                else if (player.Direction == Constants.Direction.Down)
+                    player.Direction = Constants.Direction.Right;
+            }
         }
 
         public void Boost() { }
