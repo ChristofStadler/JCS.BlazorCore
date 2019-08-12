@@ -1,5 +1,6 @@
 ﻿using BlazorCore.Game.DataModels;
 using BlazorCore.Game.Managers;
+using Microsoft.Extensions.Logging;
 using Microsoft.JSInterop;
 using System;
 using System.Collections.Generic;
@@ -16,6 +17,7 @@ namespace BlazorCore.Services
 
         #region SessionManagement
         public LevelManager levelManager = new LevelManager();
+
         public string Create(GameMode mode, Player player, IJSRuntime jsRuntime)
         {
             var uid = Guid.NewGuid().ToString();
@@ -111,7 +113,5 @@ namespace BlazorCore.Services
             return uid;
         }
         #endregion
-
-
     }
 }

@@ -56,6 +56,8 @@ else
                         <tr>
                             <th>#</th>
                             <th>Name</th>
+                            <th>Wins</th>
+                            <th>Kills</th>
                             <th>Score</th>
                         </tr>
                     </thead>
@@ -75,6 +77,8 @@ else
                                 <tr>
                                     <td>@i</td>
                                     <td>@player.Name</td>
+                                    <td>@player.Stats.Wins / @player.Stats.Games</td>
+                                    <td>@player.Stats.Kills</td>
                                     <td>@player.Stats.Score</td>
                                 </tr>
                             }

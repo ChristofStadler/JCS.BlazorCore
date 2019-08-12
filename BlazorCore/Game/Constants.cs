@@ -13,7 +13,7 @@ namespace BlazorCore.Game
         public enum CellType { None, Player, Empty, Fuel, Boost, Energy, Wall, Escape, PlayerHead }
         public enum CellSubType { None, PlayerHead }
         public enum PawnStatus { Ready, Alive, Dead, Escaped, Spawn }
-        public enum Score { Escape = 80, Kill = 40, Suicide = -40, Survive = 20, PickUp = 10 }
+        public enum Score { Escape = 80, Kill = 40, Suicide = 0, Survive = 20, PickUp = 10 }
 
         public static readonly int CellPixels = 8;
 

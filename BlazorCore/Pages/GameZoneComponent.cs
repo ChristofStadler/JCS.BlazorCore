@@ -15,6 +15,8 @@ namespace BlazorCore.Pages
     /// </summary>
     public class GameZoneComponent : ComponentBase
     {
+        [Inject]
+        IComponentContext ComponentContext { get; set; }
 
         [Inject]
         IJSRuntime JSRuntime { get; set; }
@@ -27,6 +29,21 @@ namespace BlazorCore.Pages
 
         [Parameter]
         public Game.DataModels.Session session { get; set; }
+
+        protected override async Task OnAfterRenderAsync()
+        {
+            // TEMPORARY: Currently we need this guard to avoid making the interop
+            // call during prerendering. Soon this will be unnecessary because we
+            // will change OnAfterRenderAsync so that it won't run during the
+            // prerendering phase.
+            if (!ComponentContext.IsConnected)
+            {
+                return;
+            }
+
+            InputListener();
+
+        }
 
         [JSInvokable]
         public static async Task<string> KeyPressed(string key, string uid, string sessionKey)
@@ -74,41 +91,46 @@ namespace BlazorCore.Pages
             return pressed;
         }
 
-        public static async void PlayerMove(Constants.Direction dir, string uid, string sessionKey)
+        public static async void PlayerMove(Constants.Direction dir, string uid, string sessionKey = "")
         {
-            LobbyService.Sessions[sessionKey].Players.FirstOrDefault(n => n.UID == uid).Direction = dir;
+            var player = LobbyService.Sessions[sessionKey]?.Players?.FirstOrDefault(n => n.UID == uid);
+            if(player != null)
+                player.Direction = dir;
         }
 
-        public static async void PlayerReady(string uid, string sessionKey)
+        public static async void PlayerReady(string uid, string sessionKey = "")
         {
-            if (LobbyService.Sessions[sessionKey].Status == Constants.GameStatus.Ended)
+            if (LobbyService.Sessions[sessionKey] != null && LobbyService.Sessions[sessionKey].Status == Constants.GameStatus.Ended)
                 LobbyService.Sessions[sessionKey].Players.FirstOrDefault(n => n.UID == uid).Status = Constants.PawnStatus.Ready;
         }
 
-        public static async void PlayerTurn(Constants.Direction dir, string uid, string sessionKey)
+        public static async void PlayerTurn(Constants.Direction dir, string uid, string sessionKey = "")
         {
-            var player = LobbyService.Sessions[sessionKey].Players.FirstOrDefault(n => n.UID == uid);
-            if (dir == Constants.Direction.Left)
+            var player = LobbyService.Sessions[sessionKey]?.Players?.FirstOrDefault(n => n.UID == uid);
+            if (player != null)
             {
-                if (player.Direction == Constants.Direction.Left)
-                    player.Direction = Constants.Direction.Down;
-                else if(player.Direction == Constants.Direction.Down)
-                    player.Direction = Constants.Direction.Right;
-                else if (player.Direction == Constants.Direction.Right)
-                    player.Direction = Constants.Direction.Up;
-                else if (player.Direction == Constants.Direction.Up)
-                    player.Direction = Constants.Direction.Left;
-            }
-            else if (dir == Constants.Direction.Right)
-            {
-                if (player.Direction == Constants.Direction.Left)
-                    player.Direction = Constants.Direction.Up;
-                else if (player.Direction == Constants.Direction.Up)
-                    player.Direction = Constants.Direction.Right;
-                else if (player.Direction == Constants.Direction.Right)
-                    player.Direction = Constants.Direction.Down;
-                else if (player.Direction == Constants.Direction.Down)
-                    player.Direction = Constants.Direction.Right;
+                if (dir == Constants.Direction.Left)
+                {
+                    if (player.Direction == Constants.Direction.Left)
+                        player.Direction = Constants.Direction.Down;
+                    else if (player.Direction == Constants.Direction.Down)
+                        player.Direction = Constants.Direction.Right;
+                    else if (player.Direction == Constants.Direction.Right)
+                        player.Direction = Constants.Direction.Up;
+                    else if (player.Direction == Constants.Direction.Up)
+                        player.Direction = Constants.Direction.Left;
+                }
+                else if (dir == Constants.Direction.Right)
+                {
+                    if (player.Direction == Constants.Direction.Left)
+                        player.Direction = Constants.Direction.Up;
+                    else if (player.Direction == Constants.Direction.Up)
+                        player.Direction = Constants.Direction.Right;
+                    else if (player.Direction == Constants.Direction.Right)
+                        player.Direction = Constants.Direction.Down;
+                    else if (player.Direction == Constants.Direction.Down)
+                        player.Direction = Constants.Direction.Right;
+                }
             }
         }
 
@@ -117,6 +139,11 @@ namespace BlazorCore.Pages
         public int SVGCoord(int p)
         {
             return p * Constants.CellPixels;
+        }
+
+        public void InputListener()
+        {
+            Task.Run(() => JSRuntime.InvokeAsync<string>("App.InputListener"));
         }
     }
 }

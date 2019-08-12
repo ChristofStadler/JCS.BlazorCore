@@ -1,7 +1,6 @@
 var App = {
     Init: function() {
         this.Ping();
-        this.InputListener();
     },
     Ping: function () {
         console.log("pong");
