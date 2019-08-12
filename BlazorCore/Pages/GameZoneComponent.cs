@@ -50,6 +50,8 @@ namespace BlazorCore.Pages
         {
             string pressed = "";
             key = key.ToLower();
+
+            // AWSD KEYS
             if (key.Contains("w"))
             {
                 pressed = "up";
@@ -73,6 +75,32 @@ namespace BlazorCore.Pages
                 pressed = "right";
                 PlayerMove(Constants.Direction.Right, uid, sessionKey);
             }
+
+            // ARROW KEYS
+            if (key.Contains("up"))
+            {
+                pressed = "up";
+                PlayerMove(Constants.Direction.Up, uid, sessionKey);
+            }
+
+            else if (key.Contains("down"))
+            {
+                pressed = "down";
+                PlayerMove(Constants.Direction.Down, uid, sessionKey);
+            }
+
+            else if (key.Contains("left"))
+            {
+                pressed = "left";
+                PlayerMove(Constants.Direction.Left, uid, sessionKey);
+            }
+
+            else if (key.Contains("right"))
+            {
+                pressed = "right";
+                PlayerMove(Constants.Direction.Right, uid, sessionKey);
+            }
+            // LEFT RIGHT KEYS
             else if (key.Contains("z"))
             {
                 pressed = "turn-left";
@@ -83,6 +111,7 @@ namespace BlazorCore.Pages
                 pressed = "turn-right";
                 PlayerTurn(Constants.Direction.Right, uid, sessionKey);
             }
+            // READY / BREAK KEY
             else if (key.Contains(" "))
             {
                 pressed = "space";
@@ -95,7 +124,15 @@ namespace BlazorCore.Pages
         {
             var player = LobbyService.Sessions[sessionKey]?.Players?.FirstOrDefault(n => n.UID == uid);
             if(player != null)
+            {
+                // Don't reverse into yourself.
+                if(player.Direction == Constants.Direction.Left && dir == Constants.Direction.Right) return;
+                if(player.Direction == Constants.Direction.Right && dir == Constants.Direction.Left) return;
+                if(player.Direction == Constants.Direction.Up && dir == Constants.Direction.Down) return;
+                if(player.Direction == Constants.Direction.Down && dir == Constants.Direction.Up) return;
+
                 player.Direction = dir;
+            }
         }
 
         public static async void PlayerReady(string uid, string sessionKey = "")
