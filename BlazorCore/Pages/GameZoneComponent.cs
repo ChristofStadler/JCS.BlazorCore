@@ -30,6 +30,9 @@ namespace BlazorCore.Pages
         [Parameter]
         public Game.DataModels.Session session { get; set; }
 
+        public string StatusMessage { get; set; } = "";
+        public string StatusMessageSub { get; set; } = "";
+
         protected override async Task OnAfterRenderAsync()
         {
             // TEMPORARY: Currently we need this guard to avoid making the interop
@@ -42,7 +45,6 @@ namespace BlazorCore.Pages
             }
 
             InputListener();
-
         }
 
         [JSInvokable]

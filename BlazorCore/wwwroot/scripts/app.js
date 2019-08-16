@@ -1,6 +1,6 @@
 var App = {
     Init: function() {
-        this.Ping();
+        //this.Ping();
     },
     Ping: function () {
         console.log("pong");
