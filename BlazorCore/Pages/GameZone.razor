@@ -25,7 +25,7 @@
     }
     else if (session.Status == Game.Constants.GameStatus.Ended && session.Players.Any(n => n.UID == player.UID && n.Round.Wins == 1))
     {
-        <GameZoneOverlay Message="YOU WIN" Description="Press Space to Ready" />
+        <GameZoneOverlay Message="YOU WIN!" Color="Lime" Description="Press Space to Ready" />
     }
     else if (session.Status == Game.Constants.GameStatus.Ended && session.Players.Any(n => n.UID == player.UID && n.Round.Escapes == 1))
     {
@@ -37,6 +37,6 @@
     }
     else
     {
-        <GameZoneOverlay Message="YOU LOSE" Description="Press Space to Ready" />
+        <GameZoneOverlay Message="YOU LOSE" Color="Red" Description="Press Space to Ready" />
     }
 </div>

@@ -54,70 +54,57 @@ namespace BlazorCore.Pages
             key = key.ToLower();
 
             // AWSD KEYS
-            if (key.Contains("w"))
+            if (key == "w" || key == "up")
             {
                 pressed = "up";
                 PlayerMove(Constants.Direction.Up, uid, sessionKey);
             }
 
-            else if (key.Contains("s"))
+            else if (key == "s" || key == "down")
             {
                 pressed = "down";
                 PlayerMove(Constants.Direction.Down, uid, sessionKey);
             }
 
-            else if (key.Contains("a"))
+            else if (key == "a" || key == "left")
             {
                 pressed = "left";
                 PlayerMove(Constants.Direction.Left, uid, sessionKey);
             }
 
-            else if (key.Contains("d"))
+            else if (key == "d" || key == "right")
             {
                 pressed = "right";
                 PlayerMove(Constants.Direction.Right, uid, sessionKey);
             }
 
-            // ARROW KEYS
-            if (key.Contains("up"))
-            {
-                pressed = "up";
-                PlayerMove(Constants.Direction.Up, uid, sessionKey);
-            }
 
-            else if (key.Contains("down"))
-            {
-                pressed = "down";
-                PlayerMove(Constants.Direction.Down, uid, sessionKey);
-            }
-
-            else if (key.Contains("left"))
-            {
-                pressed = "left";
-                PlayerMove(Constants.Direction.Left, uid, sessionKey);
-            }
-
-            else if (key.Contains("right"))
-            {
-                pressed = "right";
-                PlayerMove(Constants.Direction.Right, uid, sessionKey);
-            }
             // LEFT RIGHT KEYS
-            else if (key.Contains("z"))
+            else if (key == "z")
             {
                 pressed = "turn-left";
                 PlayerTurn(Constants.Direction.Left, uid, sessionKey);
             }
-            else if (key.Contains("x"))
+            else if (key == "x")
             {
                 pressed = "turn-right";
                 PlayerTurn(Constants.Direction.Right, uid, sessionKey);
             }
-            // READY / BREAK KEY
-            else if (key.Contains(" "))
+
+
+            // READY / BRAKE KEY
+            else if (key == " ")
             {
                 pressed = "space";
                 PlayerReady(uid, sessionKey);
+            }
+
+
+            // BOOST KEY
+            else if (key == "shift")
+            {
+                pressed = "shift";
+                PlayerBoost(uid, sessionKey);
             }
             return pressed;
         }
@@ -173,7 +160,7 @@ namespace BlazorCore.Pages
             }
         }
 
-        public void Boost() { }
+        public static void PlayerBoost(string uid, string sessionKey = "") { }
 
         public int SVGCoord(int p)
         {
