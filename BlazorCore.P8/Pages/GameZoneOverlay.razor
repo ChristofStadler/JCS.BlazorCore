@@ -1,0 +1,20 @@
+﻿@if (Message != "")
+{
+    <div class="gz-overlay">
+        <div>
+            <h3 style="color: @Color">@Message</h3>
+            @if (Description != "")
+            {
+                <p>@Description</p>
+            }
+        </div>
+    </div>
+}
+@code {
+    [Parameter]
+    public string Message { get; set; } = "";
+    [Parameter]
+    public string Description { get; set; } = "";
+    [Parameter]
+    public string Color { get; set; } = "white";
+}

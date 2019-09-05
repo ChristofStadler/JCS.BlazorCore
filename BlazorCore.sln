@@ -5,6 +5,10 @@ VisualStudioVersion = 16.0.29123.89
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlazorCore", "BlazorCore\BlazorCore.csproj", "{D920B81E-17B3-4C0C-9EFC-4AEAEBD957F7}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlazorCore.AI", "BlazorCore.AI\BlazorCore.AI.csproj", "{8051162E-B65E-4206-AF47-D0D21F466292}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlazorCore.P8", "BlazorCore.P8\BlazorCore.P8.csproj", "{B7251E2A-CDA0-40C6-B210-537C6F616626}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +19,14 @@ Global
 		{D920B81E-17B3-4C0C-9EFC-4AEAEBD957F7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D920B81E-17B3-4C0C-9EFC-4AEAEBD957F7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D920B81E-17B3-4C0C-9EFC-4AEAEBD957F7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8051162E-B65E-4206-AF47-D0D21F466292}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8051162E-B65E-4206-AF47-D0D21F466292}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8051162E-B65E-4206-AF47-D0D21F466292}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8051162E-B65E-4206-AF47-D0D21F466292}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B7251E2A-CDA0-40C6-B210-537C6F616626}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B7251E2A-CDA0-40C6-B210-537C6F616626}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B7251E2A-CDA0-40C6-B210-537C6F616626}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B7251E2A-CDA0-40C6-B210-537C6F616626}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

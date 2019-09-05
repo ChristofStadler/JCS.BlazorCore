@@ -1,0 +1,114 @@
+﻿
+
+/* OBJECTS                                    */
+/**********************************************/
+
+.game-level {
+    /*Scaleable*/
+    /*width: 100%;
+    height: auto;*/
+}
+
+.gz-player {
+    outline-color: #dddddd;
+    outline-style: solid;
+    outline-width: 1px;
+    outline-offset: -1px;
+    width: 8px;
+    height: 8px;
+}
+.gz-escape {
+    fill: lime;
+    width: 8px;
+    height: 8px;
+}
+.gz-wall {
+    outline-color: #666666;
+    outline-style: solid;
+    outline-width: 1px;
+    outline-offset: -1px;
+    fill: #333333;
+    width: 8px;
+    height: 8px;
+}
+.gz-empty {
+    outline-color: #dddddd;
+    outline-style: solid;
+    outline-width: 1px;
+    outline-offset: -1px;
+    fill: #eeeeee;
+    width: 8px;
+    height: 8px;
+}
+.gz-player-head {
+    width: 8px;
+    height: 8px;
+}
+
+.gz-red {
+    fill: red;
+}
+
+.gz-blue {
+    fill: blue;
+}
+
+.gz-green {
+    fill: green;
+}
+
+.gz-orange {
+    fill: orange;
+}
+
+
+/* GAME UI                                    */
+/**********************************************/
+
+.game-view {
+    font-size: 0.75rem;
+}
+
+.game-view .table h4 {
+    font-size: 1rem;
+    font-weight: bold;
+    margin-bottom: 0;
+}
+
+.gz-stats {
+    margin-bottom: 1rem;
+}
+
+.gz-stats .table {
+    margin-bottom: 0;
+}
+
+
+/* OVERLAY                                    */
+/**********************************************/
+
+.gz-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(135, 135, 135, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+.gz-overlay h3 {
+    padding-left: 2rem;
+    padding-right: 2rem;
+    background: rgba(0,0,0,0.7);
+    color: white;
+}
+
+.gz-overlay p {
+    background: rgba(0,0,0,0.7);
+    opacity: 0.7;
+    color: white;
+}

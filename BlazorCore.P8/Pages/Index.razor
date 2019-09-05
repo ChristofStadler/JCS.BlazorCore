@@ -1,0 +1,112 @@
+﻿@page "/"
+@using System.Threading
+@using BlazorCore.P8.Services
+@*@inject GameService GameService*@
+@inherits SessionComponent
+
+<h1>BlazorCore!</h1>
+
+@if (player == null)
+{
+    <p>Loading...</p>
+}
+else
+{
+    <p>Welcome @player.Name</p>
+
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-sm">
+                <h3>Lobby</h3>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>UID</th>
+                            <th>Players</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (LobbyService.Sessions == null || LobbyService.Sessions.Count() == 0)
+                        {
+                            <tr>
+                                <td colspan="4" style="text-align: center">No games at the moment.</td>
+                            </tr>
+                        }
+                        else
+                        {
+                            @foreach (var k in LobbyService.Sessions)
+                            {
+                                <tr>
+                                    <td>@k.Value.UID</td>
+                                    <td>@k.Value.Players.Where(n => n != null).Count() / @k.Value.Players.GetLength(0)</td>
+                                    <td>@k.Value.GetStatus()</td>
+                                    <td><a class="btn btn-secondary" href="joingame/@k.Value.UID" role="button">Join</a></td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-sm">
+                <h3>Leaderboard</h3>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Name</th>
+                            <th>Wins</th>
+                            <th>Kills</th>
+                            <th>Score</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (LobbyService.Players == null || LobbyService.Players.Count() == 0)
+                        {
+                            <tr>
+                                <td colspan="4" style="text-align: center">Leaderboard is empty.</td>
+                            </tr>
+                        }
+                        else
+                        {
+                            int i = 0;
+                            @foreach (var player in LobbyService.Players.OrderByDescending(n => n.Stats.Score))
+                            {
+                                i++;
+                                <tr>
+                                    <td>@i</td>
+                                    <td>@player.Name</td>
+                                    <td>@player.Stats.Wins / @player.Stats.Games</td>
+                                    <td>@player.Stats.Kills</td>
+                                    <td>@player.Stats.Score</td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+}
+
+@code {
+    CancellationTokenSource pollingCancellationToken;
+
+    protected override void OnParametersSet()
+    {
+        pollingCancellationToken?.Cancel();
+        PollForUpdates();
+    }
+
+    async void PollForUpdates()
+    {
+        pollingCancellationToken = new CancellationTokenSource();
+        while (!pollingCancellationToken.IsCancellationRequested)
+        {
+            StateHasChanged();
+
+            await Task.Delay(1000);
+        }
+    }
+}

@@ -1,0 +1,44 @@
+﻿@page "/account"
+@inherits SessionComponent
+
+<h3>Account</h3>
+
+@if (player == null)
+{
+    <p>Loading...</p>
+}
+else
+{
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-sm-4">
+                <EditForm Model="@player" OnValidSubmit="@SaveProfile">
+                    <DataAnnotationsValidator />
+                    <ValidationSummary />
+
+                    <div class="form-group">
+                        <label for="name">Username</label>
+                        <InputText class="form-control" id="name" @bind-Value="@player.Name" />
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </EditForm>
+                @if (success)
+                {
+                    <br />
+                    <div class="alert alert-success" role="alert">Account Updated</div>
+                }
+            </div>
+        </div>
+    </div>
+}
+
+
+@code {
+    bool success = false;
+
+    private void SaveProfile()
+    {
+        success = true;
+    }
+}

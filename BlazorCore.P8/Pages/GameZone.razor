@@ -1,0 +1,42 @@
+﻿@inherits GameZoneComponent
+<div style="padding: 5px; background: black; float: left; position: relative;">
+    <svg width="@session.Level.Size.WidthPX" height="@session.Level.Size.HeightPX" class="game-level">
+        @for (int x = 0; x < session.Level.Cells.GetLength(0); x++)
+        {
+            for (int y = 0; y < session.Level.Cells.GetLength(1); y++)
+            {
+                <rect x="@SVGCoord(x)" y="@SVGCoord(y)" class="@session.Level.Cells[x,y].CssClass" />
+            }
+        }
+    </svg>
+
+    @if (session.Status == Game.Constants.GameStatus.Play)
+    {
+    }
+    else if (session.Status == Game.Constants.GameStatus.WaitingForPlayers)
+    {
+        var msg = $"WAITING FOR PLAYERS {session.Players.Count(n => n != null)} / {session.PlayersMax}";
+        <GameZoneOverlay Message="@msg" />
+    }
+    else if (session.Status == Game.Constants.GameStatus.Start)
+    {
+        var msg = $"STARTING GAME {session.StartCounter}";
+        <GameZoneOverlay Message="@msg" />
+    }
+    else if (session.Status == Game.Constants.GameStatus.Ended && session.Players.Any(n => n.UID == player.UID && n.Round.Wins == 1))
+    {
+        <GameZoneOverlay Message="YOU WIN!" Color="Lime" Description="Press Space to Ready" />
+    }
+    else if (session.Status == Game.Constants.GameStatus.Ended && session.Players.Any(n => n.UID == player.UID && n.Round.Escapes == 1))
+    {
+        <GameZoneOverlay Message="YOU ESCAPED" Description="Press Space to Ready" />
+    }
+    else if (session.Status == Game.Constants.GameStatus.Ended && session.Players.Any(n => n.UID == player.UID && n.Round.Survived == 1))
+    {
+        <GameZoneOverlay Message="YOU SURVIVED" Description="Press Space to Ready" />
+    }
+    else
+    {
+        <GameZoneOverlay Message="YOU LOSE" Color="Red" Description="Press Space to Ready" />
+    }
+</div>

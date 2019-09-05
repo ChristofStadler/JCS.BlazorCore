@@ -1,0 +1,19 @@
+﻿@page "/QuickPlay/{mode}"
+@inherits SessionComponent
+<h3>QuickPlay</h3>
+@if (loaded)
+{
+    @if (QuickPlay(Game.Constants.GetMode(mode)))
+    {
+        <GameView session="@session" player="player"></GameView>
+    }
+    else
+    {
+        <br />
+        <div class="alert alert-danger" role="alert">Something went wrong</div>
+    }
+}
+@code {
+    [Parameter]
+    public string mode { get; set; }
+}
