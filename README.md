@@ -8,22 +8,22 @@ This project was created for the purpose of learning and experimenting with Blaz
 
 ## Features Overview
 - Lobby home page
--- List of game sessions
--- Leaderboard
+  - List of game sessions
+  - Leaderboard
 - Multiplayer
--- 2 player
--- 4 player free for all
+  - 2 player
+  - 4 player free for all
 - User profiles
--- Update username
+  - Update username
 
 ## Planned Features
 - Game
--- Pickups
--- Wall Destruction
--- Escape Zone (Green)
+  - Pickups
+  - Wall Destruction
+  - Escape Zone (Green)
 - Bots
--- Basic bot
--- Advanced bot using Artificial Intelligence (Genetic Evolution Neural Net)
+  - Basic bot
+  - Advanced bot using Artificial Intelligence (Genetic Evolution Neural Net)
 
 ## Dependencies
 None built from scratch only using the Blazor template.
