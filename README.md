@@ -3,6 +3,8 @@ The .NetCore3 Blazor (server-side) multiplayer game experiment.
 
 This project was created for the purpose of learning and experimenting with Blazor. Built over the course of a week or so.
 
+Built using only the official Blazor Server-Side template (Preview 7). All stats is held in memory, there is no database, when the application restarts all stats reset.
+
 ![Alt Text](https://jcs.technology/images/jcs.blazorcore.p7.gif)
 
 - ~~[Online Demo](https://blazorcore.jcs.technology)~~ Coming Soon
