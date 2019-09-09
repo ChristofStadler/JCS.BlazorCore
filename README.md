@@ -3,7 +3,7 @@ The .NetCore3 Blazor (server-side) multiplayer game experiment.
 
 This project was created for the purpose of learning and experimenting with Blazor. Built over the course of a week or so.
 
-- [Online Demo](https://blazorcore.jcs.technology) 
+- ~~[Online Demo](https://blazorcore.jcs.technology)~~ Coming Soon
 - [Blazor Homepage](https://dotnet.microsoft.com/apps/aspnet/web-apps/blazor)
 
 ## Features Overview
