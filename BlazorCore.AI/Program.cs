@@ -1,6 +1,4 @@
-﻿using GeneticSharp.Domain;
-using GeneticSharp.Domain.Chromosomes;
-using GeneticSharp.Domain.Terminations;
+﻿using GeneticSharp;
 using System;
 using System.Diagnostics.CodeAnalysis;
 
@@ -12,7 +10,7 @@ namespace BlazorCore.AI
         {
             Console.WriteLine("Hello World!");
 
-            var selection = new GeneticSharp.Domain.Selections.RouletteWheelSelection();
+            var selection = new RouletteWheelSelection();
             var crossover = new OrderedCrossover();
             var mutation = new ReverseSequenceMutation();
             var fitness = new MyProblemFitness();
@@ -28,55 +26,29 @@ namespace BlazorCore.AI
             Console.WriteLine("Best solution found has {0} fitness.", ga.BestChromosome.Fitness);
         }
 
-        public class Chromosome : IChromosome
+        public class MyProblemChromosome : ChromosomeBase
         {
-            public double? Fitness { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-
-            public int Length => throw new NotImplementedException();
-
-            public IChromosome Clone()
+            public MyProblemChromosome() : base(10)
             {
-                throw new NotImplementedException();
+                CreateGenes();
             }
 
-            public int CompareTo([AllowNull] IChromosome other)
+            public override Gene GenerateGene(int geneIndex)
             {
-                throw new NotImplementedException();
+                return new Gene(geneIndex);
             }
 
-            public IChromosome CreateNew()
+            public override IChromosome CreateNew()
             {
-                throw new NotImplementedException();
+                return new MyProblemChromosome();
             }
+        }
 
-            public Gene GenerateGene(int geneIndex)
+        public class MyProblemFitness : IFitness
+        {
+            public double Evaluate(IChromosome chromosome)
             {
-                throw new NotImplementedException();
-            }
-
-            public Gene GetGene(int index)
-            {
-                throw new NotImplementedException();
-            }
-
-            public Gene[] GetGenes()
-            {
-                throw new NotImplementedException();
-            }
-
-            public void ReplaceGene(int index, Gene gene)
-            {
-                throw new NotImplementedException();
-            }
-
-            public void ReplaceGenes(int startIndex, Gene[] genes)
-            {
-                throw new NotImplementedException();
-            }
-
-            public void Resize(int newLength)
-            {
-                throw new NotImplementedException();
+                return 0.0;
             }
         }
 
