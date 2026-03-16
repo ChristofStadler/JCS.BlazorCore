@@ -20,7 +20,7 @@ namespace BlazorCore.Utilities
         }
         public Task<string> GetItem(string key)
         {
-            return JSRuntime.InvokeAsync<string>("localStorage.getItem", key);
+            return JSRuntime.InvokeAsync<string>("localStorage.getItem", key).AsTask();
         }
     }
 }

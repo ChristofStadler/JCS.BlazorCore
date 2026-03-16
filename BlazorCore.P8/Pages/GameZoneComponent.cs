@@ -16,9 +16,6 @@ namespace BlazorCore.P8.Pages
     public class GameZoneComponent : ComponentBase
     {
         [Inject]
-        IComponentContext ComponentContext { get; set; }
-
-        [Inject]
         IJSRuntime JSRuntime { get; set; }
 
         [Inject]
@@ -33,13 +30,9 @@ namespace BlazorCore.P8.Pages
         public string StatusMessage { get; set; } = "";
         public string StatusMessageSub { get; set; } = "";
 
-        protected override async Task OnAfterRenderAsync()
+        protected override async Task OnAfterRenderAsync(bool firstRender)
         {
-            // TEMPORARY: Currently we need this guard to avoid making the interop
-            // call during prerendering. Soon this will be unnecessary because we
-            // will change OnAfterRenderAsync so that it won't run during the
-            // prerendering phase.
-            if (!ComponentContext.IsConnected)
+            if (!firstRender)
             {
                 return;
             }
