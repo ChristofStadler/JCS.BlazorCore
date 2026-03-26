@@ -1,0 +1,152 @@
+@page "/guide"
+
+<h3>Guide</h3>
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-8">
+            <h4>Overview</h4>
+            <p>
+                BlazorCore is a multiplayer arena game inspired by the classic Tron light-cycle concept.
+                Each player controls a pawn that continuously moves forward, leaving a trail behind it.
+                Avoid colliding with walls, your own trail, and other players' trails to survive as long as possible.
+                The last player alive wins the round!
+            </p>
+
+            <h4>Game Modes</h4>
+            <table class="table table-bordered col-sm-6">
+                <thead>
+                    <tr>
+                        <th>Mode</th>
+                        <th>Players</th>
+                        <th>Arena Size</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Quick Play – 2 Player</td>
+                        <td>2</td>
+                        <td>80 × 80</td>
+                    </tr>
+                    <tr>
+                        <td>Quick Play – 4 Player</td>
+                        <td>4</td>
+                        <td>100 × 100</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h4>How to Play</h4>
+            <ol>
+                <li>Join or start a game from the Home page or use Quick Play from the navigation menu.</li>
+                <li>Wait in the lobby until all player slots are filled.</li>
+                <li>A countdown will begin and then the game starts – your pawn moves automatically.</li>
+                <li>Steer your pawn to avoid collisions and outlast your opponents.</li>
+                <li>When a round ends, press <strong>Space</strong> to mark yourself as Ready for the next round.</li>
+            </ol>
+
+            <h4>Controls</h4>
+            <table class="table table-sm table-bordered col-sm-8">
+                <thead>
+                    <tr>
+                        <th>Key(s)</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>&#x2191; / W</td>
+                        <td>Move Up</td>
+                    </tr>
+                    <tr>
+                        <td>&#x2193; / S</td>
+                        <td>Move Down</td>
+                    </tr>
+                    <tr>
+                        <td>&#x2190; / A</td>
+                        <td>Move Left</td>
+                    </tr>
+                    <tr>
+                        <td>&#x2192; / D</td>
+                        <td>Move Right</td>
+                    </tr>
+                    <tr>
+                        <td>Z</td>
+                        <td>Turn Left (relative to current direction)</td>
+                    </tr>
+                    <tr>
+                        <td>X</td>
+                        <td>Turn Right (relative to current direction)</td>
+                    </tr>
+                    <tr>
+                        <td>Space</td>
+                        <td>Ready (after a round ends)</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h4>Arena Elements</h4>
+            <table class="table table-bordered col-sm-8">
+                <thead>
+                    <tr>
+                        <th>Element</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Wall</strong></td>
+                        <td>The inner boundary of the arena. Hitting a wall destroys your pawn.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Escape Zone</strong></td>
+                        <td>The outer edge of the arena. Reaching it lets you escape and earn bonus points.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Player Trail</strong></td>
+                        <td>The path left behind each pawn. Colliding with any trail (including your own) destroys your pawn.</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h4>Scoring</h4>
+            <table class="table table-bordered col-sm-6">
+                <thead>
+                    <tr>
+                        <th>Event</th>
+                        <th>Points</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Escape</td>
+                        <td>80</td>
+                    </tr>
+                    <tr>
+                        <td>Kill (an opponent crashes into your trail)</td>
+                        <td>40</td>
+                    </tr>
+                    <tr>
+                        <td>Survive (last player standing)</td>
+                        <td>20</td>
+                    </tr>
+                    <tr>
+                        <td>Pick Up</td>
+                        <td>10</td>
+                    </tr>
+                    <tr>
+                        <td>Suicide (crash into your own trail)</td>
+                        <td>0</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h4>Winning</h4>
+            <p>
+                A round ends when only one player remains alive. That player is declared the winner of the round
+                and earns a Win on the leaderboard. Players accumulate score across all sessions which is tracked
+                on the Home page leaderboard.
+            </p>
+        </div>
+    </div>
+</div>
